@@ -1,19 +1,16 @@
 package com.example.networksniffer;
 
 import android.os.Bundle;
+import android.widget.Spinner;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-
 import com.example.networksniffer.ui.main.SectionsPagerAdapter;
+
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,20 +18,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
+        ViewPager viewPager = findViewById(R.id.view_pager);
+        tabs.addTab(tabs.newTab().setText("1: Select interface"));
+        tabs.addTab(tabs.newTab().setText("+"));
+        tabs.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        /*FloatingActionButton fab = findViewById(R.id.fab);
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
             }
-        });*/
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
+        // Spinner (Dropdown menu)
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        //ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, GetNetworkInterfaces(), R.layout.support_simple_spinner_dropdown_item);
+    }
+
+    private Enumeration<NetworkInterface> GetNetworkInterfaces() {
+        try {
+            return NetworkInterface.getNetworkInterfaces();
+        } catch (SocketException ignored) { }
+
+        return null;
     }
 }
