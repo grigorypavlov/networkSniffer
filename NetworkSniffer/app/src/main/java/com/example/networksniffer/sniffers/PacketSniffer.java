@@ -1,5 +1,6 @@
 package com.example.networksniffer.sniffers;
 
+import android.widget.Spinner;
 import android.widget.TableLayout;
 
 import org.jnetpcap.Pcap;
@@ -9,7 +10,6 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 
 public interface PacketSniffer {
     NetworkInterface nInterface = null;
@@ -17,7 +17,7 @@ public interface PacketSniffer {
     void StartListeningAsync(TableLayout tl);
     void StopListening();
 
-    default Enumeration<NetworkInterface> GetInterfaces() throws SocketException {
+    default Enumeration<NetworkInterface> GetInterfaces(Spinner sp) throws SocketException {
         ArrayList<PcapIf> networkDevices = new ArrayList<>();
         StringBuilder errbuf = new StringBuilder();
 
@@ -36,5 +36,7 @@ public interface PacketSniffer {
         }
 
         System.out.println("Choose one of the above devices.");
+
+        return null;
     }
 }
