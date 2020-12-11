@@ -1,8 +1,10 @@
 package com.example.networksniffer.sniffers;
 
+import android.widget.TableLayout;
+
 public class EthernetSniffer implements PacketSniffer{
     @Override
-    public void StartListeningAsync() {
+    public void StartListeningAsync(TableLayout tl) {
 
     }
 
