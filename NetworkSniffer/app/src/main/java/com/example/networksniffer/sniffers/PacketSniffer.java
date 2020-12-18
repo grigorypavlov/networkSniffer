@@ -4,16 +4,17 @@ import android.widget.TableLayout;
 
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
-import org.jnetpcap.packet.PcapPacket;
-import org.jnetpcap.packet.PcapPacketHandler;
-import org.jnetpcap.protocol.network.Arp;
 
 import java.net.SocketException;
 import java.util.ArrayList;
 
 public abstract class PacketSniffer {
     private PcapIf nInterface = null;
-    private StringBuilder errbuf = new StringBuilder();
+    public StringBuilder errbuf = new StringBuilder();
+
+    public PcapIf getnInterface() {
+        return nInterface;
+    }
 
     // Starts the listening-thread
     public void StartListeningAsync(TableLayout tl) throws Exception {
@@ -22,6 +23,7 @@ public abstract class PacketSniffer {
         }
 
         // TODO: Start listening
+        Listen();
     };
 
     // Stops the listening thread
@@ -56,46 +58,5 @@ public abstract class PacketSniffer {
         this.nInterface = nInterface;
     }
 
-    public void Listen() {
-        // Open the device to capture packets
-        int snaplen = 64 * 1024;
-        int flags = Pcap.MODE_PROMISCUOUS;
-        int timeout = 10 * 1000;
-
-        Pcap pcap = Pcap.openLive(nInterface.getName(), snaplen, flags, timeout, errbuf);
-
-        if (pcap == null) {
-            System.err.printf("Error while opening device for capture: " + errbuf.toString());
-            return;
-        }
-        System.out.println("Device opened.");
-
-        // PacketHandler will receive the packets
-        PcapPacketHandler packetHandler = new PcapPacketHandler() {
-            Arp arp = new Arp();
-
-            /*@Override
-            public void nextPacket(PcapPacket pcapPacket, Object o) {
-                // For testing, this will capture arp-packets only
-                if (pcapPacket.hasHeader(arp)) {
-                    System.out.println("Hardware type: " + arp.hardwareType());
-                    System.out.println("Protocol type: " + arp.protocolType());
-                    System.out.println("Packet: " + arp.getPacket());
-                    System.out.println();
-                }
-            }*/
-
-            @Override
-            public void nextPacket(PcapPacket pcapPacket, Object o) {
-                System.out.println(pcapPacket.toDebugString());
-                System.out.println();
-            }
-        };
-
-        // Start capturing (this will capture only 1 packets)
-        pcap.loop(1, packetHandler, "test");
-
-        // Close the device
-        pcap.close();
-    }
+    public abstract void Listen();
 }
