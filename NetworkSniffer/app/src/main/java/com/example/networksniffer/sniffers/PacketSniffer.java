@@ -1,23 +1,31 @@
 package com.example.networksniffer.sniffers;
 
-import android.widget.Spinner;
 import android.widget.TableLayout;
-
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
-
-import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 
-public interface PacketSniffer {
-    NetworkInterface nInterface = null;
+public abstract class PacketSniffer {
+    PcapIf nInterface = null;
 
-    void StartListeningAsync(TableLayout tl);
-    void StopListening();
+    // Starts the listening-thread
+    public void StartListeningAsync(TableLayout tl) throws Exception {
+        if (nInterface == null) {
+            throw new Exception("No network-interface specified!");
+        }
 
-    default Enumeration<NetworkInterface> GetInterfaces(Spinner sp) throws SocketException {
+        // TODO: Start listening
+    };
+
+    // Stops the listening thread
+    public void StopListening() {
+        // TODO: Stop listening
+    };
+
+    // Returns all available network interfaces
+    public ArrayList<PcapIf> GetInterfaces() throws SocketException {
+        // Get all available network interfaces
         ArrayList<PcapIf> networkDevices = new ArrayList<>();
         StringBuilder errbuf = new StringBuilder();
 
@@ -31,12 +39,15 @@ public interface PacketSniffer {
         System.out.println("Network devices found:");
         int i = 0;
         for (PcapIf device : networkDevices) {
-            String description = (device.getDescription() != null) ? device.getDescription() : "No description aviable";
+            String description = (device.getDescription() != null) ? device.getDescription() : "No description available";
             System.out.printf("#%d: %s [%s]\n", i++, device.getName(), description);
         }
 
-        System.out.println("Choose one of the above devices.");
+        return networkDevices;
+    }
 
-        return null;
+    // Select the interface to listen on
+    public void SetListeningInterface(PcapIf nInterface) {
+        this.nInterface = nInterface;
     }
 }

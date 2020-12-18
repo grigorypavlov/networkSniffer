@@ -1,22 +1,6 @@
 package com.example.networksniffer.sniffers;
 
-import android.widget.TableLayout;
 
-import org.jnetpcap.*;
+public class WLanSniffer extends PacketSniffer{
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
-public class WLanSniffer implements PacketSniffer{
-
-    @Override
-    public void StartListeningAsync(TableLayout tl) {
-        
-    }
-
-    @Override
-    public void StopListening() {
-
-    }
 }
