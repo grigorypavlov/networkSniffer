@@ -30,7 +30,7 @@ public class EthernetSniffer extends PacketSniffer {
             }
         };
 
-        // Start capturing (this will capture only 1 packets)
+        // Start capturing (this will capture only 1 packet)
         pcap.loop(1, packetHandler, "test");
 
         // Close the device
