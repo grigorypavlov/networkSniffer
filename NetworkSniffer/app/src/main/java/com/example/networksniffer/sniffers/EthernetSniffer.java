@@ -5,6 +5,7 @@ import org.jnetpcap.Pcap;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.PcapPacketHandler;
 
+/** Sniffer for ethernet-packages */
 public class EthernetSniffer extends PacketSniffer {
 
     public void Listen() {

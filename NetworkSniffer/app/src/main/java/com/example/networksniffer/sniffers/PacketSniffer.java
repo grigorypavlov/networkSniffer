@@ -12,11 +12,13 @@ public abstract class PacketSniffer {
     private PcapIf nInterface = null;
     public StringBuilder errbuf = new StringBuilder();
 
+    /** @return Returns the selected interface */
     public PcapIf getnInterface() {
         return nInterface;
     }
 
-    // Starts the listening-thread
+    /** Starts the listening-thread
+     * @param tl will be filled with the information from the packets */
     public void StartListeningAsync(TableLayout tl) throws Exception {
         if (nInterface == null) {
             throw new Exception("No network-interface specified!");
@@ -31,7 +33,7 @@ public abstract class PacketSniffer {
         // TODO: Stop listening
     };
 
-    // Returns all available network interfaces
+    /** @return all available network interfaces */
     public ArrayList<PcapIf> GetInterfaces() throws SocketException {
         // Get all available network interfaces
         ArrayList<PcapIf> networkDevices = new ArrayList<>();
@@ -53,7 +55,7 @@ public abstract class PacketSniffer {
         return networkDevices;
     }
 
-    // Select the interface to listen on
+    /** Select the interface to listen on */
     public void SetListeningInterface(PcapIf nInterface) {
         this.nInterface = nInterface;
     }
