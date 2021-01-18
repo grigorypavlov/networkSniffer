@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public abstract class PacketSniffer {
     private PcapIf nInterface = null;
     public StringBuilder errbuf = new StringBuilder();
+    protected boolean run = false;
 
     /** @return Returns the selected interface */
     public PcapIf getnInterface() {
@@ -24,13 +25,13 @@ public abstract class PacketSniffer {
             throw new Exception("No network-interface specified!");
         }
 
-        // TODO: Start listening
+        run = true;
         Listen();
     };
 
     // Stops the listening thread
     public void StopListening() {
-        // TODO: Stop listening
+        run = false;
     };
 
     /** @return all available network interfaces */
