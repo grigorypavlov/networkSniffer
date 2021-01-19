@@ -20,8 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         TabLayout tabs = findViewById(R.id.tabs);
         ViewPager viewPager = findViewById(R.id.view_pager);
-        tabs.addTab(tabs.newTab().setText("1: Select interface"));
-        tabs.addTab(tabs.newTab().setText("+"));
+        tabs.addTab(tabs.newTab().setText("NetworkSniffer"));
         tabs.setTabGravity(TabLayout.GRAVITY_FILL);
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
