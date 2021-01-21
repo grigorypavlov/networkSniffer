@@ -2,16 +2,26 @@ package com.example.networksniffer.sniffers;
 
 import android.widget.TableLayout;
 
+import com.example.networksniffer.observerpattern.IPublisher;
+import com.example.networksniffer.observerpattern.ISubscriber;
+
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
 
 import java.net.SocketException;
 import java.util.ArrayList;
 
-public abstract class PacketSniffer {
+public abstract class PacketSniffer implements IPublisher {
     private PcapIf nInterface = null;
     public StringBuilder errbuf = new StringBuilder();
     protected boolean run = false;
+
+    /** Notifies all subs with the new packet */
+    public void Notify() {
+        for (ISubscriber s : subscribers) {
+            s.Update(null); // TODO: Pass packet
+        }
+    }
 
     /** @return Returns the selected interface */
     public PcapIf getnInterface() {
