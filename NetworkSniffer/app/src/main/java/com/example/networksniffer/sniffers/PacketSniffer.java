@@ -39,10 +39,16 @@ public abstract class PacketSniffer implements IPublisher {
         Listen();
     };
 
-    // Stops the listening thread
+    /** Stops the listening thread */
     public void StopListening() {
         run = false;
     };
+
+    /** In the thread still running?
+     * @return A boolean that indicates whether the thread is running or not */
+    public boolean isRunning() {
+        return run;
+    }
 
     /** @return all available network interfaces */
     public ArrayList<PcapIf> GetInterfaces() throws SocketException {
