@@ -1,6 +1,9 @@
 package com.example.networksniffer.vpnservice;
 
+import android.content.Intent;
 import android.os.ParcelFileDescriptor;
+
+import java.io.IOException;
 
 /** Class to connect to a vpn service */
 public class LocalVPNService extends android.net.VpnService {
@@ -9,13 +12,19 @@ public class LocalVPNService extends android.net.VpnService {
     private ParcelFileDescriptor vpnInterface = null;
 
     /** Initialize the service */
-    public LocalVPNService() {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        isRunning = true;
         SetupVPN();
-    }
 
-    /** @return True when the service is running */
-    public static boolean IsRunning() {
-        return isRunning;
+        try {
+            // TODO: Start the service
+            throw new IOException(); // Make the compiler happy :)
+        } catch (IOException ioEx) {
+            // TODO: Notify user that the service could not be started
+            CleanUp();
+        }
     }
 
     /** Setup the VPN */
@@ -31,12 +40,23 @@ public class LocalVPNService extends android.net.VpnService {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
+
+    /** @return Returns true when the service is running */
+    public static boolean IsRunning() {
+        return isRunning;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
         CleanUp();
     }
 
+    /** Cleans up all resources */
     private void CleanUp() {
         // TODO: Clean up resources
     }
