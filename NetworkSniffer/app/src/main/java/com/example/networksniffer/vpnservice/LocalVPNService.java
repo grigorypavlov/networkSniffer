@@ -3,7 +3,9 @@ package com.example.networksniffer.vpnservice;
 import android.content.Intent;
 import android.os.ParcelFileDescriptor;
 
+import java.io.FileDescriptor;
 import java.io.IOException;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /** Class to connect to a vpn service */
 public class LocalVPNService extends android.net.VpnService {
@@ -63,6 +65,10 @@ public class LocalVPNService extends android.net.VpnService {
 
     /** VPN-Thread */
     private static class VPNRunnable implements Runnable {
+
+        private FileDescriptor vpnFileDescriptor;
+
+        private ConcurrentLinkedQueue<Packet>
 
         /** Is executed when Thread.start() is called */
         @Override
