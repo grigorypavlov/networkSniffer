@@ -78,7 +78,7 @@ public class TCPHeader {
         return (flags & URG) == URG;
     }
 
-    private void FillHeader(ByteBuffer buffer) {
+    public void FillHeader(ByteBuffer buffer) {
         buffer.putShort((short) sourcePort);
         buffer.putShort((short) destinationPort);
 

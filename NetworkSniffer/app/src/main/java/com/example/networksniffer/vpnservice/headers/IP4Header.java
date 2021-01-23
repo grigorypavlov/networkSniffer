@@ -43,7 +43,7 @@ public class IP4Header {
 
     /** Fill the header with information
      * @param buffer Data is written in this buffer */
-    public void fillHeader(ByteBuffer buffer) {
+    public void FillHeader(ByteBuffer buffer) {
         buffer.put((byte)(this.version << 4 | this.IHL));
         buffer.put((byte)this.totalLength);
         buffer.putShort((short)this.totalLength);
