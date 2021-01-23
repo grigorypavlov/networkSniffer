@@ -119,7 +119,7 @@ public class Packet {
      * @param buffer Buffer to update
      * @param payloadSize New payload-size
      * */
-    public UpdateUDPBuffer(ByteBuffer buffer, int payloadSize) {
+    public void UpdateUDPBuffer(ByteBuffer buffer, int payloadSize) {
         buffer.position(0); // Go to the start of the buffer
         FillHeader(buffer);
         backingBuffer = buffer;

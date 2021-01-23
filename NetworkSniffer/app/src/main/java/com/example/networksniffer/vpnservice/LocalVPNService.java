@@ -1,21 +1,37 @@
 package com.example.networksniffer.vpnservice;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.ParcelFileDescriptor;
 
+import java.io.Closeable;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.channels.Selector;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /** Class to connect to a vpn service */
 public class LocalVPNService extends android.net.VpnService {
+    private static final String VPN_ADDRESS = "10.0.0.2"; // Supports only IPv4
+    private static final String VPN_ROUTE = "0.0.0.0"; // Intercept everything
 
     private static boolean isRunning = false;
     private ParcelFileDescriptor vpnInterface = null;
+    private PendingIntent pendingIntent;
+
+    private ConcurrentLinkedQueue<Packet> deviceToNetworkUDPQueue;
+    private ConcurrentLinkedQueue<Packet> deviceToNetworkTCPQueue;
+    private ConcurrentLinkedQueue<Packet> networkToDeviceQueue;
+    private ExecutorService executorService;
+
+    private Selector udpSelector;
+    private Selector tcpSelector;
 
     /** Initialize the service */
     @Override
@@ -25,10 +41,19 @@ public class LocalVPNService extends android.net.VpnService {
         SetupVPN();
 
         try {
-            // TODO: Start the service
-            throw new IOException(); // Make the compiler happy :)
+            udpSelector = Selector.open();
+            tcpSelector = Selector.open();
+            deviceToNetworkUDPQueue = new ConcurrentLinkedQueue<>();
+            deviceToNetworkTCPQueue = new ConcurrentLinkedQueue<>();
+            networkToDeviceQueue = new ConcurrentLinkedQueue<>();
+
+            executorService = Executors.newFixedThreadPool(5);
+            // TODO: Start executor-services
         } catch (IOException ioEx) {
-            // TODO: Notify user that the service could not be started
+            /* TODO: Notify user that the service could not be started
+            * The user has to disconnect the service manually
+            */
+
             CleanUp();
         }
     }
@@ -39,8 +64,8 @@ public class LocalVPNService extends android.net.VpnService {
             Builder builder = new Builder();
 
             vpnInterface = builder
-                    .addAddress("2001:db8::1", 64)
-                    .addRoute("::", 0) // Accept all traffic
+                    .addAddress(VPN_ADDRESS, 32)
+                    .addRoute(VPN_ROUTE, 0) // Accept all traffic
                     .establish();
         }
     }
@@ -59,12 +84,27 @@ public class LocalVPNService extends android.net.VpnService {
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
+        executorService.shutdownNow();
         CleanUp();
     }
 
     /** Cleans up all resources */
     private void CleanUp() {
-        // TODO: Clean up resources
+        deviceToNetworkUDPQueue = null;
+        deviceToNetworkTCPQueue = null;
+        networkToDeviceQueue = null;
+        ByteBufferPool.Clear();
+        CloseResources(udpSelector, tcpSelector, vpnInterface);
+    }
+
+    private static void CloseResources(Closeable... resources) {
+        for (Closeable resource : resources) {
+            try  {
+                resource.close();
+            } catch (IOException ioex) {
+                // Ignore
+            }
+        }
     }
 
     /** VPN-Thread */
@@ -74,7 +114,7 @@ public class LocalVPNService extends android.net.VpnService {
 
         private ConcurrentLinkedQueue<Packet> deviceToNetworkUDPQueue;
         private ConcurrentLinkedQueue<Packet> deviceToNetworkTCPQueue;
-        private ConcurrentLinkedQueue<Packet> networkToDeviceQueue;
+        private ConcurrentLinkedQueue<ByteBuffer> networkToDeviceQueue;
 
         /** Constructor
          * @param vpnFileDescriptor FileDescriptor
@@ -85,7 +125,7 @@ public class LocalVPNService extends android.net.VpnService {
         public VPNRunnable(FileDescriptor vpnFileDescriptor,
                            ConcurrentLinkedQueue<Packet> deviceToNetworkUDPQueue,
                            ConcurrentLinkedQueue<Packet> deviceToNetworkTCPQueue,
-                           ConcurrentLinkedQueue<Packet> networkToDeviceQueue) {
+                           ConcurrentLinkedQueue<ByteBuffer> networkToDeviceQueue) {
             this.vpnFileDescriptor = vpnFileDescriptor;
             this.deviceToNetworkUDPQueue = deviceToNetworkUDPQueue;
             this.deviceToNetworkTCPQueue = deviceToNetworkTCPQueue;
@@ -104,7 +144,7 @@ public class LocalVPNService extends android.net.VpnService {
 
                 while (!Thread.interrupted()) {
                     if (dataSent)
-                        bufferToNetwork = ByteBufferPool.acquire();
+                        bufferToNetwork = ByteBufferPool.Acquire();
                     else
                         bufferToNetwork.clear();
 
@@ -133,7 +173,7 @@ public class LocalVPNService extends android.net.VpnService {
                             vpnOutput.write(bufferFromNetwork);
                         }
                         dataReceived = true;
-                        ByteBufferPool.release(bufferFromNetwork);
+                        ByteBufferPool.Release(bufferFromNetwork);
                     } else {
                         dataReceived = false;
                     }
