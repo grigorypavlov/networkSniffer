@@ -71,7 +71,6 @@ public class LocalVPNService extends android.net.VpnService {
         private ConcurrentLinkedQueue<Packet>
 
         /** Is executed when Thread.start() is called */
-        @Override
         public void run() {
             // TODO: Implement the vpn
         }
