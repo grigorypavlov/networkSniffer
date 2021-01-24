@@ -1,6 +1,7 @@
-package com.example.networksniffer.vpnservice.networkprotocol;
+package com.example.networksniffer.vpnservice.networkprotocol.tcp;
 
-import com.example.networksniffer.vpnservice.Packet;
+import com.example.networksniffer.vpnservice.networkprotocol.LRUCache;
+import com.example.networksniffer.vpnservice.networkprotocol.Packet;
 
 import java.io.IOException;
 import java.nio.channels.SelectionKey;

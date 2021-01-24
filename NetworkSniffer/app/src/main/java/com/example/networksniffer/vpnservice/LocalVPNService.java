@@ -4,6 +4,10 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.ParcelFileDescriptor;
 
+import com.example.networksniffer.vpnservice.networkprotocol.Packet;
+import com.example.networksniffer.vpnservice.networkprotocol.tcp.TCPInput;
+import com.example.networksniffer.vpnservice.networkprotocol.tcp.TCPOutput;
+
 import java.io.Closeable;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -27,7 +31,7 @@ public class LocalVPNService extends android.net.VpnService {
 
     private ConcurrentLinkedQueue<Packet> deviceToNetworkUDPQueue;
     private ConcurrentLinkedQueue<Packet> deviceToNetworkTCPQueue;
-    private ConcurrentLinkedQueue<Packet> networkToDeviceQueue;
+    private ConcurrentLinkedQueue<ByteBuffer> networkToDeviceQueue;
     private ExecutorService executorService;
 
     private Selector udpSelector;
@@ -49,6 +53,9 @@ public class LocalVPNService extends android.net.VpnService {
 
             executorService = Executors.newFixedThreadPool(5);
             // TODO: Start executor-services
+            executorService.submit(new TCPInput(networkToDeviceQueue, tcpSelector));
+            executorService.submit(new TCPOutput(deviceToNetworkTCPQueue, networkToDeviceQueue, tcpSelector, this));
+            executorService.submit(new VPNRunnable(vpnInterface.getFileDescriptor(), deviceToNetworkUDPQueue, deviceToNetworkTCPQueue, networkToDeviceQueue));
         } catch (IOException ioEx) {
             /* TODO: Notify user that the service could not be started
             * The user has to disconnect the service manually

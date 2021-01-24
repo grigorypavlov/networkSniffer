@@ -1,11 +1,9 @@
-package com.example.networksniffer.vpnservice;
+package com.example.networksniffer.vpnservice.networkprotocol;
 
 import androidx.annotation.NonNull;
 
-import com.example.networksniffer.vpnservice.networkprotocol.IP4Header;
-import com.example.networksniffer.vpnservice.networkprotocol.TCPHeader;
-import com.example.networksniffer.vpnservice.networkprotocol.TransportProtocol;
-import com.example.networksniffer.vpnservice.networkprotocol.UDPHeader;
+import com.example.networksniffer.vpnservice.BitUtils;
+import com.example.networksniffer.vpnservice.networkprotocol.tcp.TCPHeader;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
