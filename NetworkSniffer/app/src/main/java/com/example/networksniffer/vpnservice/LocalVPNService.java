@@ -7,6 +7,8 @@ import android.os.ParcelFileDescriptor;
 import com.example.networksniffer.vpnservice.networkprotocol.Packet;
 import com.example.networksniffer.vpnservice.networkprotocol.tcp.TCPInput;
 import com.example.networksniffer.vpnservice.networkprotocol.tcp.TCPOutput;
+import com.example.networksniffer.vpnservice.networkprotocol.udp.UDPInput;
+import com.example.networksniffer.vpnservice.networkprotocol.udp.UDPOutput;
 
 import java.io.Closeable;
 import java.io.FileDescriptor;
@@ -52,7 +54,9 @@ public class LocalVPNService extends android.net.VpnService {
             networkToDeviceQueue = new ConcurrentLinkedQueue<>();
 
             executorService = Executors.newFixedThreadPool(5);
-            // TODO: Start executor-services
+
+            executorService.submit(new UDPInput(networkToDeviceQueue, udpSelector));
+            executorService.submit(new UDPOutput(deviceToNetworkUDPQueue, udpSelector, this));
             executorService.submit(new TCPInput(networkToDeviceQueue, tcpSelector));
             executorService.submit(new TCPOutput(deviceToNetworkTCPQueue, networkToDeviceQueue, tcpSelector, this));
             executorService.submit(new VPNRunnable(vpnInterface.getFileDescriptor(), deviceToNetworkUDPQueue, deviceToNetworkTCPQueue, networkToDeviceQueue));
