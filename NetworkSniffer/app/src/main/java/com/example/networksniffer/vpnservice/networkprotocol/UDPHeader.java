@@ -1,4 +1,4 @@
-package com.example.networksniffer.vpnservice.headers;
+package com.example.networksniffer.vpnservice.networkprotocol;
 
 import androidx.annotation.NonNull;
 

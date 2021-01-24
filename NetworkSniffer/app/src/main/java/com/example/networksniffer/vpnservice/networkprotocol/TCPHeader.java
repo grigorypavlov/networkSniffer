@@ -1,10 +1,8 @@
-package com.example.networksniffer.vpnservice.headers;
+package com.example.networksniffer.vpnservice.networkprotocol;
 
 import androidx.annotation.NonNull;
 
 import com.example.networksniffer.vpnservice.BitUtils;
-
-import org.jnetpcap.nio.JBuffer;
 
 import java.nio.ByteBuffer;
 
