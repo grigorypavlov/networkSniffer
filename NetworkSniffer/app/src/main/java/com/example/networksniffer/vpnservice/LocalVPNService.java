@@ -4,6 +4,9 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.ParcelFileDescriptor;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.example.networksniffer.R;
 import com.example.networksniffer.vpnservice.networkprotocol.Packet;
 import com.example.networksniffer.vpnservice.networkprotocol.tcp.TCPInput;
 import com.example.networksniffer.vpnservice.networkprotocol.tcp.TCPOutput;
@@ -53,6 +56,7 @@ public class LocalVPNService extends android.net.VpnService {
             deviceToNetworkTCPQueue = new ConcurrentLinkedQueue<>();
             networkToDeviceQueue = new ConcurrentLinkedQueue<>();
 
+            // Create threads
             executorService = Executors.newFixedThreadPool(5);
 
             executorService.submit(new UDPInput(networkToDeviceQueue, udpSelector));
@@ -60,6 +64,7 @@ public class LocalVPNService extends android.net.VpnService {
             executorService.submit(new TCPInput(networkToDeviceQueue, tcpSelector));
             executorService.submit(new TCPOutput(deviceToNetworkTCPQueue, networkToDeviceQueue, tcpSelector, this));
             executorService.submit(new VPNRunnable(vpnInterface.getFileDescriptor(), deviceToNetworkUDPQueue, deviceToNetworkTCPQueue, networkToDeviceQueue));
+            //LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("Test").putExtra("running", true));
         } catch (IOException ioEx) {
             /* TODO: Notify user that the service could not be started
             * The user has to disconnect the service manually
@@ -73,11 +78,9 @@ public class LocalVPNService extends android.net.VpnService {
     public void SetupVPN() {
         if (vpnInterface == null) {
             Builder builder = new Builder();
-
-            vpnInterface = builder
-                    .addAddress(VPN_ADDRESS, 32)
-                    .addRoute(VPN_ROUTE, 0) // Accept all traffic
-                    .establish();
+            builder.addAddress(VPN_ADDRESS, 32);
+            builder.addRoute(VPN_ROUTE, 0);
+            vpnInterface = builder.setSession(getString(R.string.app_name)).setConfigureIntent(pendingIntent).establish();
         }
     }
 
@@ -91,11 +94,12 @@ public class LocalVPNService extends android.net.VpnService {
         return isRunning;
     }
 
+    /** Stop the VPN-Service */
     @Override
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
-        executorService.shutdownNow();
+        executorService.shutdownNow(); // Stop all threads
         CleanUp();
     }
 
@@ -108,6 +112,9 @@ public class LocalVPNService extends android.net.VpnService {
         CloseResources(udpSelector, tcpSelector, vpnInterface);
     }
 
+    /** Close resources
+     * @param resources Resources to close
+     * */
     private static void CloseResources(Closeable... resources) {
         for (Closeable resource : resources) {
             try  {
@@ -136,7 +143,8 @@ public class LocalVPNService extends android.net.VpnService {
         public VPNRunnable(FileDescriptor vpnFileDescriptor,
                            ConcurrentLinkedQueue<Packet> deviceToNetworkUDPQueue,
                            ConcurrentLinkedQueue<Packet> deviceToNetworkTCPQueue,
-                           ConcurrentLinkedQueue<ByteBuffer> networkToDeviceQueue) {
+                           ConcurrentLinkedQueue<ByteBuffer> networkToDeviceQueue)
+        {
             this.vpnFileDescriptor = vpnFileDescriptor;
             this.deviceToNetworkUDPQueue = deviceToNetworkUDPQueue;
             this.deviceToNetworkTCPQueue = deviceToNetworkTCPQueue;
@@ -144,6 +152,7 @@ public class LocalVPNService extends android.net.VpnService {
         }
 
         /** Is executed when Thread.start() is called */
+        @Override
         public void run() {
             FileChannel vpnInput = new FileInputStream(vpnFileDescriptor).getChannel();
             FileChannel vpnOutput = new FileOutputStream(vpnFileDescriptor).getChannel();
@@ -151,7 +160,7 @@ public class LocalVPNService extends android.net.VpnService {
             try {
                 ByteBuffer bufferToNetwork = null;
                 boolean dataSent = true;
-                boolean dataReceived;
+                boolean dataReceived = false;
 
                 while (!Thread.interrupted()) {
                     if (dataSent)

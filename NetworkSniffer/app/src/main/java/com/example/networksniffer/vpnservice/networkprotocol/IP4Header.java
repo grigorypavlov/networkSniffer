@@ -39,6 +39,9 @@ public class IP4Header {
         byte[] addressBytes = new byte[4];
         buffer.get(addressBytes, 0, 4);
         this.sourceAddress = InetAddress.getByAddress(addressBytes);
+
+        buffer.get(addressBytes, 0, 4);
+        this.destinationAddress = InetAddress.getByAddress(addressBytes);
     }
 
     /** Fill the header with information
