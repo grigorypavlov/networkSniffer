@@ -2,6 +2,7 @@ package com.example.networksniffer;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.VpnService;
 import android.os.Bundle;
 import android.widget.Spinner;
 
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
          * Only one app can have this permission, the permissions are
          * revoked as soon as the user gives another VPN app the same permissions.
          */
-        Intent vpnIntent = LocalVPNService.prepare(this);
+        Intent vpnIntent = VpnService.prepare(this);
         if (vpnIntent != null) {
             startActivityForResult(vpnIntent, 0x0F);
         }
@@ -75,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0x0F && resultCode == RESULT_OK) {
             startService(new Intent(this, LocalVPNService.class));
-
         }
     }
 
