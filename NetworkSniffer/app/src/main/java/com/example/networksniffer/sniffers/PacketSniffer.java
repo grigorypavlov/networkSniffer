@@ -1,7 +1,5 @@
 package com.example.networksniffer.sniffers;
 
-import android.widget.TableLayout;
-
 import com.example.networksniffer.observerpattern.IPublisher;
 import com.example.networksniffer.observerpattern.ISubscriber;
 
@@ -11,7 +9,7 @@ import org.jnetpcap.PcapIf;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-public abstract class PacketSniffer implements IPublisher {
+public abstract class PacketSniffer extends Thread implements IPublisher {
     private PcapIf nInterface = null;
     public StringBuilder errbuf = new StringBuilder();
     protected boolean run = false;
@@ -28,21 +26,27 @@ public abstract class PacketSniffer implements IPublisher {
         return nInterface;
     }
 
-    /** Starts the listening-thread
-     * @param tl will be filled with the information from the packets */
-    public void StartListeningAsync(TableLayout tl) throws Exception {
+    /** Starts the listening-thread */
+    public void run() {
         if (nInterface == null) {
-            throw new Exception("No network-interface specified!");
+            System.out.println("No network-interface specified, aborting.");
+            return;
         }
 
         run = true;
         Listen();
     };
 
-    // Stops the listening thread
+    /** Stops the listening thread */
     public void StopListening() {
         run = false;
     };
+
+    /** In the thread still running?
+     * @return A boolean that indicates whether the thread is running or not */
+    public boolean isRunning() {
+        return run;
+    }
 
     /** @return all available network interfaces */
     public ArrayList<PcapIf> GetInterfaces() throws SocketException {

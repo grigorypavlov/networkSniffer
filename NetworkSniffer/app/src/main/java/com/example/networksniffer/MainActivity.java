@@ -1,8 +1,11 @@
 package com.example.networksniffer;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Spinner;
 
+import com.example.networksniffer.vpnservice.LocalVPNService;
 import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +14,13 @@ import com.example.networksniffer.ui.main.SectionsPagerAdapter;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+
+/**
+ * Network-Sniffer
+ *
+ * @author Colin van Loo, Grigory Pavlov
+ *
+ * */
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +53,30 @@ public class MainActivity extends AppCompatActivity {
         // Spinner (Dropdown menu)
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         //ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, GetNetworkInterfaces(), R.layout.support_simple_spinner_dropdown_item);
+
+
+        /* Get permission to start the VPN Service
+         *
+         * Only one app can have this permission, the permissions are
+         * revoked as soon as the user gives another VPN app the same permissions.
+         */
+        Intent vpnIntent = LocalVPNService.prepare(this);
+        if (vpnIntent != null) {
+            startActivityForResult(vpnIntent, 0x0F);
+        }
+        else {
+            onActivityResult(0x0F, Activity.RESULT_OK, null);
+        }
+    }
+
+    /** Starts the VPN Service */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0x0F && resultCode == RESULT_OK) {
+            startService(new Intent(this, LocalVPNService.class));
+
+        }
     }
 
     private Enumeration<NetworkInterface> GetNetworkInterfaces() {
