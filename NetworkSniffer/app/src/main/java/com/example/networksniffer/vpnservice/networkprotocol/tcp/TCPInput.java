@@ -52,6 +52,7 @@ public class TCPInput implements Runnable {
             // TODO: Handel exception
         } catch (IOException ioex) {
             // TODO: Handel exception
+            ioex.printStackTrace();
         }
     }
 

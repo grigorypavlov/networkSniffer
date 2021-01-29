@@ -79,6 +79,7 @@ public class TCPOutput implements Runnable {
             // Stop
         } catch (IOException ioex) {
             // TODO: Handle exception
+            ioex.printStackTrace();
         } finally {
             TCB.CloseAll();
         }

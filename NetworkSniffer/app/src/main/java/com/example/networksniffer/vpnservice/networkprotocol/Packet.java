@@ -1,7 +1,5 @@
 package com.example.networksniffer.vpnservice.networkprotocol;
 
-import androidx.annotation.NonNull;
-
 import com.example.networksniffer.vpnservice.BitUtils;
 import com.example.networksniffer.vpnservice.networkprotocol.tcp.TCPHeader;
 
@@ -40,7 +38,6 @@ public class Packet {
     }
 
     /** Turns Packet into a human-readable form */
-    @NonNull
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Packet{");

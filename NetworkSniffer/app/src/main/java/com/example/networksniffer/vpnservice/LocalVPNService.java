@@ -4,8 +4,6 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.ParcelFileDescriptor;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import com.example.networksniffer.R;
 import com.example.networksniffer.vpnservice.networkprotocol.Packet;
 import com.example.networksniffer.vpnservice.networkprotocol.tcp.TCPInput;
@@ -64,11 +62,10 @@ public class LocalVPNService extends android.net.VpnService {
             executorService.submit(new TCPInput(networkToDeviceQueue, tcpSelector));
             executorService.submit(new TCPOutput(deviceToNetworkTCPQueue, networkToDeviceQueue, tcpSelector, this));
             executorService.submit(new VPNRunnable(vpnInterface.getFileDescriptor(), deviceToNetworkUDPQueue, deviceToNetworkTCPQueue, networkToDeviceQueue));
-            //LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("Test").putExtra("running", true));
         } catch (IOException ioEx) {
             /* TODO: Notify user that the service could not be started
-            * The user has to disconnect the service manually
-            */
+             * The user has to disconnect the service manually
+             */
 
             CleanUp();
         }
