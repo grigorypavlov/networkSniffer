@@ -23,15 +23,36 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        android:visibility="visible"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:visibility="visible">
 
-        <Spinner
-            android:id="@+id/spinner"
+
+        <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleX="100"
-            android:scaleY="100"
-            android:visibility="visible" />
+            android:orientation="vertical"
+            android:visibility="visible"
+            tools:visibility="visible">
+
+            <RadioButton
+                android:id="@+id/radio1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Radio1"
+                android:visibility="visible"
+                tools:visibility="visible" />
+
+            <RadioButton
+                android:id="@+id/radio2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Radio2"
+                android:visibility="visible"
+                tools:visibility="visible" />
+        </RadioGroup>
 
     </androidx.viewpager.widget.ViewPager>
 

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import com.example.networksniffer.vpnservice.LocalVPNService;
@@ -14,6 +16,7 @@ import com.example.networksniffer.ui.main.SectionsPagerAdapter;
 
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.sql.SQLOutput;
 import java.util.Enumeration;
 
 /**
@@ -51,10 +54,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Spinner (Dropdown menu)
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        //ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, GetNetworkInterfaces(), R.layout.support_simple_spinner_dropdown_item);
-
 
         /* Get permission to start the VPN Service
          *
@@ -85,5 +84,22 @@ public class MainActivity extends AppCompatActivity {
         } catch (SocketException ignored) { }
 
         return null;
+    }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radio1:
+                if (checked)
+                    System.out.println("1");
+                    break;
+            case R.id.radio2:
+                if (checked)
+                    System.out.println("2");
+                    break;
+        }
     }
 }
