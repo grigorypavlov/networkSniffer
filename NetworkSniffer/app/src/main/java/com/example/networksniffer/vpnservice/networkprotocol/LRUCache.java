@@ -2,6 +2,7 @@ package com.example.networksniffer.vpnservice.networkprotocol;
 
 import java.util.LinkedHashMap;
 
+/** A cache that organizes items in order of use */
 public class LRUCache<K, V> extends LinkedHashMap<K, V> {
     private int maxSize;
     private CleanupCallback callback;

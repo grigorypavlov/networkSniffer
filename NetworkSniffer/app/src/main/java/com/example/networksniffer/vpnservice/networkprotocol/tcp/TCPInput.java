@@ -122,6 +122,7 @@ public class TCPInput implements Runnable {
             }
         }
 
+        System.out.println("TCP-Input:" + receiveBuffer.toString());
         outputQueue.offer(receiveBuffer);
     }
 }

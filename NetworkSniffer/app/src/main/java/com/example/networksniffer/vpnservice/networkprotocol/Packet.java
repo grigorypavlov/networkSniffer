@@ -2,6 +2,7 @@ package com.example.networksniffer.vpnservice.networkprotocol;
 
 import com.example.networksniffer.vpnservice.BitUtils;
 import com.example.networksniffer.vpnservice.networkprotocol.tcp.TCPHeader;
+import com.example.networksniffer.vpnservice.networkprotocol.udp.UDPHeader;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /** Transmission Control Block
- *
+ * Stores information about tcp connections
  * */
 public class TCB {
     public String ipAndPort;
@@ -42,18 +42,6 @@ public class TCB {
                 }
             });
 
-    public static TCB GetTCB(String ipAndPort) {
-        synchronized (tcbCache) {
-            return tcbCache.get(ipAndPort);
-        }
-    }
-
-    public static void PutTCB(String ipAndPort, TCB tcb) {
-        synchronized (tcbCache) {
-            tcbCache.put(ipAndPort, tcb);
-        }
-    }
-
     public TCB(String ipAndPort, long mySequenceNum, long theirSequenceNum, long myAcknowledgementNum, long theirAcknowledgementNum,
                SocketChannel channel, Packet referencePacket) {
         this.ipAndPort = ipAndPort;
@@ -62,6 +50,18 @@ public class TCB {
         this.myAcknowledgementNum = myAcknowledgementNum;
         this.channel = channel;
         this.referencePacket = referencePacket;
+    }
+
+    public static TCB GetTCB(String ipAndPort) {
+        synchronized (tcbCache) {
+            return tcbCache.get(ipAndPort);
+        }
+    }
+
+    public static void SetTCB(String ipAndPort, TCB tcb) {
+        synchronized (tcbCache) {
+            tcbCache.put(ipAndPort, tcb);
+        }
     }
 
     public static void CloseTCB(TCB tcb) {

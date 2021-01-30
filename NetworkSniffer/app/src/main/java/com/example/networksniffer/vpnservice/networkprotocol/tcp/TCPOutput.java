@@ -48,6 +48,8 @@ public class TCPOutput implements Runnable {
                 if (currentThread.isInterrupted())
                     break;
 
+                System.out.println(currentPacket.toString());
+
                 ByteBuffer payloadBuffer = currentPacket.backingBuffer;
                 currentPacket.backingBuffer = null;
                 ByteBuffer responseBuffer = ByteBufferPool.Acquire();
@@ -95,7 +97,7 @@ public class TCPOutput implements Runnable {
 
             TCB tcb = new TCB(ipAndPort, random.nextInt(Short.MAX_VALUE + 1), tcpHeader.sequenceNumber, tcpHeader.sequenceNumber + 1,
                     tcpHeader.acknowledgementNumber, outputChannel, currentPacket);
-            TCB.PutTCB(ipAndPort, tcb);
+            TCB.SetTCB(ipAndPort, tcb);
 
             try {
                 outputChannel.connect(new InetSocketAddress(destinationAddress, destinationPort));
