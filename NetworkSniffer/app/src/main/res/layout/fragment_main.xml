@@ -65,4 +65,125 @@
             tools:visibility="visible" />
     </RadioGroup>
 
+    <TableLayout
+        android:id="@+id/tableView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="290dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:layout_column="1"
+                android:text="Package"
+                android:padding="10dip"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:layout_column="2"
+                android:text="Version"
+                android:padding="10dip"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:layout_column="3"
+                android:text="Length"
+                android:padding="10dip"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                /></TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:layout_column="1"
+                android:text="Package"
+                android:padding="10dip"
+                />
+            <TextView
+                android:layout_column="2"
+                android:text="Version"
+                android:padding="10dip"
+                />
+            <TextView
+                android:layout_column="3"
+                android:text="Length"
+                android:padding="10dip"
+                /></TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:layout_column="1"
+                android:text="Package"
+                android:padding="10dip"
+                />
+            <TextView
+                android:layout_column="2"
+                android:text="Version"
+                android:padding="10dip"
+                />
+            <TextView
+                android:layout_column="3"
+                android:text="Length"
+                android:padding="10dip"
+                /></TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:layout_column="1"
+                android:text="Package"
+                android:padding="10dip"
+                />
+            <TextView
+                android:layout_column="2"
+                android:text="Version"
+                android:padding="10dip"
+                />
+            <TextView
+                android:layout_column="3"
+                android:text="Length"
+                android:padding="10dip"
+                /></TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:layout_column="1"
+                android:text="Package"
+                android:padding="10dip"
+                />
+            <TextView
+                android:layout_column="2"
+                android:text="Version"
+                android:padding="10dip"
+                />
+            <TextView
+                android:layout_column="3"
+                android:text="Length"
+                android:padding="10dip"
+                /></TableRow>
+
+
+    </TableLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
