@@ -6,6 +6,19 @@ import com.example.networksniffer.vpnservice.BitUtils;
 
 import java.nio.ByteBuffer;
 
+/*                   0      7 8     15 16    23 24    31
+ *               +--------+--------+--------+--------+
+ *               |     Source      |   Destination   |
+ *               |      Port       |      Port       |
+ *               +--------+--------+--------+--------+
+ *               |                 |                 |
+ *               |     Length      |    Checksum     |
+ *               +--------+--------+--------+--------+
+ *               |
+ *               |          data octets ...
+ *               +---------------- ...
+ */
+
 public class UDPHeader {
     public int sourcePort;
     public int destinationPort;
