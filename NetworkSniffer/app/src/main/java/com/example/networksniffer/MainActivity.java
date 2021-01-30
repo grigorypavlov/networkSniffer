@@ -92,14 +92,17 @@ public class MainActivity extends AppCompatActivity {
 
         // Check which radio button was clicked
         switch(view.getId()) {
-            case R.id.radio1:
+            case R.id.BluetoothRadio:
                 if (checked)
                     System.out.println("1");
                 break;
-            case R.id.radio2:
+            case R.id.EthernetRadio:
                 if (checked)
                     System.out.println("2");
                 break;
+            case R.id.WlanRadio:
+                if (checked)
+                    System.out.println("3");
         }
     }
 }
