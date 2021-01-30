@@ -95,11 +95,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.radio1:
                 if (checked)
                     System.out.println("1");
-                    break;
+                break;
             case R.id.radio2:
                 if (checked)
                     System.out.println("2");
-                    break;
+                break;
         }
     }
 }
