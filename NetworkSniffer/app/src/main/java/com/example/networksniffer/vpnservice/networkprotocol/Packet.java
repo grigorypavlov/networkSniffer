@@ -111,7 +111,7 @@ public class Packet {
         UpdateIP4Checksum();
     }
 
-    /** Updates the TCP-Buffer
+    /** Updates the UDP-Buffer
      * @param buffer Buffer to update
      * @param payloadSize New payload-size
      * */
@@ -154,11 +154,16 @@ public class Packet {
         while (sum >> 16 > 0)
             sum = (sum & 0xFFFF) + (sum >> 16);
 
-        sum = ~sum;
+        System.out.println(sum);
+        sum = ~sum; // Bitwise complement: Inverts 1 and 0 in a number
+        System.out.println(sum);
         ip4Header.headerChecksum = sum;
         backingBuffer.putShort(10, (short)sum);
     }
 
+    /** Updates the TCP checksum
+     * @param payloadSize Size of the payload
+     */
     private void UpdateTCPChecksum(int payloadSize) {
         int sum = 0;
         int tcpLength = TCP_HEADER_SIZE + payloadSize;
@@ -191,13 +196,13 @@ public class Packet {
             sum = (sum & 0xFFFF) + (sum >> 16);
         }
 
-        sum = ~sum;
+        sum = ~sum; // Bitwise complement: Inverts 1 and 0 in a number
         tcpHeader.checksum = sum;
         backingBuffer.putShort(IP4_HEADER_SIZE + 16, (short)sum);
     }
 
     /** Creates headers
-     * @param buffer Contains header data
+     * @param buffer Buffer to fill with header data
      * */
     public void FillHeader(ByteBuffer buffer) {
         ip4Header.FillHeader(buffer);

@@ -7,6 +7,10 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
     private int maxSize;
     private CleanupCallback callback;
 
+    /** Constructor
+     * @param maxSize The maximal size of the cache
+     * @param callback The callback
+     */
     public LRUCache(int maxSize, CleanupCallback callback) {
         super(maxSize + 1, 1, true);
 
@@ -14,6 +18,7 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
         this.callback = callback;
     }
 
+    /** Removes the oldest entry */
     @Override
     protected boolean removeEldestEntry(Entry<K, V> eldest) {
         if (size() > maxSize) {

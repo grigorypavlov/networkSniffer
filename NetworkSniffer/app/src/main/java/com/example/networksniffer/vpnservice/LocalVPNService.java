@@ -24,12 +24,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.net.ssl.SNIHostName;
 
 /** Class to connect to a vpn service */
 public class LocalVPNService extends android.net.VpnService {
     private static final String VPN_ADDRESS = "10.0.0.2"; // Supports only IPv4
-    private static final String VPN_ROUTE = "0.0.0.0"; // Intercept everything
+    private static final String VPN_ROUTE = "0.0.0.0"; // Intercept everything // IPv6: ::/0
 
     private static boolean isRunning = false;
     private ParcelFileDescriptor vpnInterface = null;

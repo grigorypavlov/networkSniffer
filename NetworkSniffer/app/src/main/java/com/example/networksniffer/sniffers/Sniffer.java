@@ -9,7 +9,7 @@ import com.example.networksniffer.vpnservice.networkprotocol.Packet;
  */
 public class Sniffer implements IPublisher {
     private static Sniffer sniffer = new Sniffer(); // Instance of itself
-    private Packet currPacket;
+    private Packet currPacket = null;
 
     /** Private constructor
      * prevents any other class from instantiating
@@ -40,6 +40,8 @@ public class Sniffer implements IPublisher {
 
     /** Notifies all subscriber of the current packet */
     public void Notify() {
+        if (currPacket == null) return;
+
         for (ISubscriber sub: subscribers) {
             sub.Update(currPacket);
         }

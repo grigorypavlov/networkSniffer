@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements ISubscriber {
      */
     public void Update(Object packet) {
         Packet p = (Packet)packet;
-        System.out.println(packet.toString());
+        System.out.println(packet.toString()); // Print received packet
+        // TODO: Show packet in table
     }
 }
