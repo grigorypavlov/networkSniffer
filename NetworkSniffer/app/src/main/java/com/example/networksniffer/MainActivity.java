@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements ISubscriber {
         return null;
     }
 
-    public void onRadioButtonClicked(View view) {
+    /*public void onRadioButtonClicked(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
 
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements ISubscriber {
                 if (checked)
                     System.out.println("3");
         }
-    }
+    }*/
 
     /** Send me the new packet
      * @param packet New packet
@@ -116,6 +116,6 @@ public class MainActivity extends AppCompatActivity implements ISubscriber {
     public void Update(Object packet) {
         Packet p = (Packet)packet;
         System.out.println(packet.toString()); // Print received packet
-        // TODO: Show packet in table
+        //R.string packetString = new R.string(packet);
     }
 }
