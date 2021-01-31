@@ -1,7 +1,5 @@
 package com.example.networksniffer;
 
-import com.example.networksniffer.sniffers.EthernetSniffer;
-import com.example.networksniffer.sniffers.PacketSniffer;
 import com.example.networksniffer.vpnservice.BitUtils;
 
 import org.junit.Test;

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.ParcelFileDescriptor;
 
 import com.example.networksniffer.R;
+import com.example.networksniffer.sniffers.Sniffer;
 import com.example.networksniffer.vpnservice.networkprotocol.Packet;
 import com.example.networksniffer.vpnservice.networkprotocol.tcp.TCPInput;
 import com.example.networksniffer.vpnservice.networkprotocol.tcp.TCPOutput;
@@ -22,6 +23,8 @@ import java.nio.channels.Selector;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import javax.net.ssl.SNIHostName;
 
 /** Class to connect to a vpn service */
 public class LocalVPNService extends android.net.VpnService {
@@ -151,6 +154,8 @@ public class LocalVPNService extends android.net.VpnService {
         /** Is executed when Thread.start() is called */
         @Override
         public void run() {
+            Sniffer sniffer = Sniffer.getInstance();
+
             FileChannel vpnInput = new FileInputStream(vpnFileDescriptor).getChannel();
             FileChannel vpnOutput = new FileOutputStream(vpnFileDescriptor).getChannel();
 
@@ -170,6 +175,8 @@ public class LocalVPNService extends android.net.VpnService {
                         dataSent = true;
                         bufferToNetwork.flip();
                         Packet packet = new Packet(bufferToNetwork);
+
+                        sniffer.UpdatePacket(packet); // Send the new Packet to the sniffer
 
                         if (packet.isUDP()) {
                             deviceToNetworkUDPQueue.offer(packet);

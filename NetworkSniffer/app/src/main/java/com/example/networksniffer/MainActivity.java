@@ -6,9 +6,11 @@ import android.net.VpnService;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 
+import com.example.networksniffer.observerpattern.ISubscriber;
+import com.example.networksniffer.sniffers.Sniffer;
 import com.example.networksniffer.vpnservice.LocalVPNService;
+import com.example.networksniffer.vpnservice.networkprotocol.Packet;
 import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,17 +18,17 @@ import com.example.networksniffer.ui.main.SectionsPagerAdapter;
 
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.sql.SQLOutput;
 import java.util.Enumeration;
 
 /**
  * Network-Sniffer
  *
  * @author Colin van Loo, Grigory Pavlov
+ * @version 0.3
  *
- * */
+ */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ISubscriber {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Sniffer sniffer = Sniffer.getInstance();
+        sniffer.Subscribe(this);
 
         /* Get permission to start the VPN Service
          *
@@ -104,5 +108,13 @@ public class MainActivity extends AppCompatActivity {
                 if (checked)
                     System.out.println("3");
         }
+    }
+
+    /** Send me the new packet
+     * @param packet New packet
+     */
+    public void Update(Object packet) {
+        Packet p = (Packet)packet;
+        System.out.println(packet.toString());
     }
 }

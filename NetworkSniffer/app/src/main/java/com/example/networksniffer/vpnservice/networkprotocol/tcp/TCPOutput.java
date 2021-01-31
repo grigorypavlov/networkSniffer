@@ -48,7 +48,7 @@ public class TCPOutput implements Runnable {
                 if (currentThread.isInterrupted())
                     break;
 
-                System.out.println(currentPacket.toString());
+                //System.out.println("TCP-Out: " + currentPacket.toString());
 
                 ByteBuffer payloadBuffer = currentPacket.backingBuffer;
                 currentPacket.backingBuffer = null;
