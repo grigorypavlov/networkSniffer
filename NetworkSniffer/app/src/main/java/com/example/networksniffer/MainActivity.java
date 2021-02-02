@@ -2,10 +2,15 @@ package com.example.networksniffer;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.example.networksniffer.observerpattern.ISubscriber;
 import com.example.networksniffer.sniffers.Sniffer;
@@ -29,6 +34,7 @@ import java.util.Enumeration;
  */
 
 public class MainActivity extends AppCompatActivity implements ISubscriber {
+    private TableLayout table;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +120,50 @@ public class MainActivity extends AppCompatActivity implements ISubscriber {
      * @param packet New packet
      */
     public void Update(Object packet) {
-        Packet p = (Packet)packet;
-        System.out.println(packet.toString()); // Print received packet
-        //R.string packetString = new R.string(packet);
+        // Ensures that the following code is executed on the ui-thread
+        // FIXME: This is not working and the application crashes ;(
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Packet p = (Packet)packet;
+                System.out.println(packet.toString());
+
+                if (table == null) {
+                    // Get a reference to the table
+                    table = (TableLayout) findViewById(R.id.tableView);
+
+                    // Create columns
+                    TableRow trow1 = new TableRow(MainActivity.this);
+
+                    TextView tview1 = new TextView(MainActivity.this);
+                    tview1.setText("Sender");
+                    tview1.setTextColor(Color.BLUE);
+                    trow1.addView(tview1);
+
+                    TextView tview2 = new TextView(MainActivity.this);
+                    tview2.setText("Receiver");
+                    tview2.setTextColor(Color.BLUE);
+                    trow1.addView(tview2);
+
+                    table.addView(trow1);
+                }
+
+                TableRow tableRow = new TableRow(MainActivity.this);
+
+                // First column
+                TextView textView1 = new TextView(MainActivity.this);
+                textView1.setText(((Packet) packet).ip4Header.sourceAddress.toString());
+                textView1.setTextColor(Color.WHITE);
+                tableRow.addView(textView1);
+
+                // Second column
+                TextView textView2 = new TextView(MainActivity.this);
+                textView2.setText(((Packet) packet).ip4Header.destinationAddress.toString());
+                textView2.setTextColor(Color.WHITE);
+                tableRow.addView(textView2);
+
+                table.addView(tableRow);
+            }
+        });
     }
 }

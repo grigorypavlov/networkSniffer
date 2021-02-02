@@ -66,6 +66,7 @@ public class UDPOutput implements Runnable {
                     try {
                         outputChannel.connect(new InetSocketAddress(destinationAddress, destinationPort));
                     } catch (IOException ioex) {
+                        ioex.printStackTrace();
                         CloseChannel(outputChannel);
                         ByteBufferPool.Release(currentPacket.backingBuffer);
                         continue;
@@ -85,6 +86,7 @@ public class UDPOutput implements Runnable {
                     while (payloadBuffer.hasRemaining())
                         outputChannel.write(payloadBuffer);
                 } catch (IOException ioex) {
+                    ioex.printStackTrace();
                     channelCache.remove(ipAndPort);
                     CloseChannel(outputChannel);
                 }
@@ -95,6 +97,7 @@ public class UDPOutput implements Runnable {
             // Stop
         } catch (IOException ioex) {
             // TODO: Handle exception
+            ioex.printStackTrace();
         } finally {
             CloseAll();
         }

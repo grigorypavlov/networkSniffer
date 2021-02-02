@@ -62,6 +62,7 @@ public class UDPInput implements Runnable {
             // Stop
         } catch (IOException ioex) {
             // TODO: Handle exception
+            ioex.printStackTrace();
         }
     }
 }

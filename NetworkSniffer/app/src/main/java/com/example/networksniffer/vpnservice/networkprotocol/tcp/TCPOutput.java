@@ -114,6 +114,7 @@ public class TCPOutput implements Runnable {
                     return;
                 }
             } catch (IOException ioex) {
+                ioex.printStackTrace();
                 currentPacket.UpdateTCPBuffer(responseBuffer, (byte) TCPHeader.RST, 0, tcb.myAcknowledgementNum, 0);
                 TCB.CloseTCB(tcb);
             }
@@ -185,6 +186,7 @@ public class TCPOutput implements Runnable {
                     outputChannel.write(payloadBuffer);
                 }
             } catch (IOException ioex) {
+                ioex.printStackTrace();
                 SentRST(tcb, payloadSize, responseBuffer);
                 return;
             }

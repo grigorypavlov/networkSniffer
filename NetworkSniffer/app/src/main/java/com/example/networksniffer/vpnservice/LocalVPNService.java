@@ -68,7 +68,7 @@ public class LocalVPNService extends android.net.VpnService {
             /* TODO: Notify user that the service could not be started
              * The user has to disconnect the service manually
              */
-
+            ioEx.printStackTrace();
             CleanUp();
         }
     }
@@ -208,7 +208,7 @@ public class LocalVPNService extends android.net.VpnService {
             } catch (InterruptedException iex) {
                 System.out.println("Stopping");
             } catch (IOException ioex) {
-                System.out.println(ioex.getStackTrace());
+                ioex.printStackTrace();
             } finally {
                 CloseResources(vpnInput, vpnOutput);
             }

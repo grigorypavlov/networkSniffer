@@ -74,6 +74,7 @@ public class TCPInput implements Runnable {
                 key.interestOps(SelectionKey.OP_READ);
             }
         } catch (IOException ioex) {
+            ioex.printStackTrace();
             ByteBuffer responeBuffer = ByteBufferPool.Acquire();
             referencePacket.UpdateTCPBuffer(responeBuffer, (byte) TCPHeader.RST, 0, tcb.myAcknowledgementNum, 0);
             outputQueue.offer(responeBuffer);
@@ -95,6 +96,7 @@ public class TCPInput implements Runnable {
             try {
                 readBytes = inputChannel.read(receiveBuffer);
             } catch (IOException ioex) {
+                ioex.printStackTrace();
                 referencePacket.UpdateTCPBuffer(receiveBuffer, (byte) TCPHeader.RST, 0, tcb.myAcknowledgementNum, 0);
                 outputQueue.offer(receiveBuffer);
                 TCB.CloseTCB(tcb);
