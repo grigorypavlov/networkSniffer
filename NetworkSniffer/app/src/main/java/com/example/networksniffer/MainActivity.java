@@ -120,10 +120,13 @@ public class MainActivity extends AppCompatActivity implements ISubscriber {
      * @param packet New packet
      */
     public void Update(Object packet) {
+        // TODO: Make table more beautiful and scrollable (maybe with auto scroll?)
         Packet p = (Packet)packet;
         System.out.println(packet.toString());
 
         if (table == null) {
+            /* Use the first row to create the columns */
+
             // Get a reference to the table
             table = (TableLayout) findViewById(R.id.tableView);
 
@@ -148,13 +151,13 @@ public class MainActivity extends AppCompatActivity implements ISubscriber {
 
         // First column
         TextView textView1 = new TextView(MainActivity.this);
-        textView1.setText(((Packet) packet).ip4Header.sourceAddress.toString());
+        textView1.setText(p.ip4Header.sourceAddress.toString());
         textView1.setTextColor(Color.BLACK);
         tableRow.addView(textView1);
 
         // Second column
         TextView textView2 = new TextView(MainActivity.this);
-        textView2.setText(((Packet) packet).ip4Header.destinationAddress.toString());
+        textView2.setText(p.ip4Header.destinationAddress.toString());
         textView2.setTextColor(Color.BLACK);
         tableRow.addView(textView2);
 
