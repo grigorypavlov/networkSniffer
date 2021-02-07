@@ -69,8 +69,9 @@
         android:id="@+id/tableView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
         android:alwaysDrawnWithCache="false"
@@ -79,24 +80,33 @@
         android:background="@drawable/border"
         android:clickable="true"
         android:fadeScrollbars="true"
+        android:fillViewport="true"
         android:focusable="true"
+        android:gravity="bottom"
         android:importantForAccessibility="yes"
         android:isScrollContainer="true"
         android:nestedScrollingEnabled="true"
+        android:padding="10px"
+        android:paddingLeft="10px"
+        android:paddingTop="10px"
+        android:paddingRight="10px"
+        android:paddingBottom="10px"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck">
+
         <TableRow>
+
             <TextView
-                android:textColor="#033372"
                 android:text="@string/sender"
-            />
+                android:textColor="#033372" />
+
             <TextView
-                android:textColor="#033372"
                 android:text="@string/receiver"
-            />
+                android:textColor="#033372" />
         </TableRow>
     </TableLayout>
 
