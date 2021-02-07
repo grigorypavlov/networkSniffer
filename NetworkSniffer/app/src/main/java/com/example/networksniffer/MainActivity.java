@@ -2,12 +2,9 @@ package com.example.networksniffer;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.VpnService;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.RadioButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -125,26 +122,8 @@ public class MainActivity extends AppCompatActivity implements ISubscriber {
         System.out.println(packet.toString());
 
         if (table == null) {
-            /* Use the first row to create the columns */
-
             // Get a reference to the table
             table = (TableLayout) findViewById(R.id.tableView);
-
-            // Create columns
-            TableRow trow1 = new TableRow(MainActivity.this);
-
-            TextView tview1 = new TextView(MainActivity.this);
-            tview1.setText("Sender");
-            tview1.setTextColor(Color.BLUE);
-            trow1.addView(tview1);
-
-            TextView tview2 = new TextView(MainActivity.this);
-            tview2.setText("Receiver");
-            tview2.setTextColor(Color.BLUE);
-            trow1.addView(tview2);
-
-            // Ensures that the following code is executed on the ui-thread
-            runOnUiThread(() -> table.addView(trow1));
         }
 
         TableRow tableRow = new TableRow(MainActivity.this);

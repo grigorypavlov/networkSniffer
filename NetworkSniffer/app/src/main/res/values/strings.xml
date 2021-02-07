@@ -2,4 +2,6 @@
     <string name="app_name">NetworkSniffer</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+    <string name="sender">Sender</string>
+    <string name="receiver">Receiver</string>
 </resources>
